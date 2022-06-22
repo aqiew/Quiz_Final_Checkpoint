@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <title>Menu Utama</title>
+</head>
+<body>
+    <img id="loading" src="loading.gif">
+    <div class="container mx-auto p-6 w-4/5 mt-5">
+        <!--Menu-->
+        <div class="w-fit mx-auto">
+            <ul class="mx-auto">
+                <li class="m-8 py-2 px-3 inline bg-sky-500 text-white font-semibold hover:bg-sky-400"><a href="Menu_Utama.html">Home</a></li>
+                <li class="m-8 py-2 px-3 inline font-semibold text-sky-500 hover:text-red-400"><a href="Menu_Kategori.html">Kategori</a></li>
+                <li class="m-8 py-2 px-3 inline font-semibold text-sky-500 hover:text-red-400"><a href="Menu_Resep.html">ResepDunia</a></li>
+                <li class="m-8 py-2 px-3 inline font-semibold text-sky-500 hover:text-red-400"><a href="Menu_Tentang_Kami.html">Tentang Kami</a></li>
+            </ul>
+        </div>
+        <!--Banner-->
+        <div class="w-full h-80 overflow-hidden my-10 rounded-md bg-local bg-no-repeat bg-center bg-cover p-20" style="background-image: url('http://source.unsplash.com/1200x600?food');">
+            <div class="w-fit backdrop-blur-md bg-white/50 mx-auto">
+                <h2 class="font-mono font-semibold text-slate-800 text-4x1 p-5"><span class="text-sky-600">Resep Dunia Menyatukan Kita</span></h2>
+            </div>
+        </div>
+        <!--Resep Terbaik-->
+        <!--Gunakan Grid-->
+        <div id="resep_terbaik" class="grid grid-cols-3 gap-4 my-10"></div>
+
+        <!--Banner Kecil-->
+        <div class="w-full h-48 overflow-hidden my-10 rounded-md bg-local bg-no-repeat bg-center bg-cover p-20" style="background-image: url('http://source.unsplash.com/1200x600?vegetable');"></div>
+
+        <!--Daftar Resep, Gunakan Grid-->
+        <h3 class="text-2x1 text-sky-500 pb-10 font-semibold text-center">Pilih Resep Favoritmu</h3>
+        <div id="resep_lain" class="grid grid-cols-4 gap-4"></div>
+        <p class="text-sky-500 text-center py-10">AsepSetiawan@2022</p>
+    </div>
+    <script>
+        $(function(){
+            $.ajax({
+                method : "GET",
+                url: "https://www.themealdb.com/api/json/v1/1/filter.php?c=Seafood"
+                
+            })
+            .done(function(msg) {
+                //koversi ke dalam array
+                let meals = msg.meals;
+                console.log(meals);
+                //masuk ked dalam id
+                // let isidata = meals[0].strMeal + "<img src= '"+ meals[0].strMealThumb +"'>";
+                let isidata = "";
+                let isiresep = "";
+                let i=0;
+
+                //menampilkan banyak data
+                $.each(meals, function(index){
+                    if(i<3){ 
+                        isidata += "<div class='bg-slate-100 border rounded-md overflow-hidden'><div class='h-60 overflow-hidden'><a href='Detail_Resep.html?idR="+meals[index].idMeal+"'><img class='w-full' src='"+meals[index].strMealThumb+"'></div><p class='font-semibold text-x1 p-5'>"+meals[index].strMeal+"</p></a></div></div>";
+                    }
+                    else{
+                        isiresep +="<div class='bg-slate-100 border rounded-md overflow-hidden'><div class='h-60 overflow-hidden'><a href='Detail_Resep.html?idR="+meals[index].idMeal+"'><img class='w-full' src='"+meals[index].strMealThumb+"'></div><p class='font-semibold text-x1 p-5'>"+meals[index].strMeal+"</p></a></div></div>";
+                    }
+                    i++;
+                });
+                $("#resep_terbaik").append(isidata);
+                $("#resep_lain").append(isiresep);
+                $("#loading").hide(); //sembunyikan gambar loading jika data telah masuk
+            });
+        });
+    </script>
+</body>
+</html>
